@@ -16,15 +16,48 @@ public class MazeAdventure extends JFrame {
 
         setSize(800, 600);
         setLocationRelativeTo(null);
+        
+        setContentPane(new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                
+                GradientPaint gradient = new GradientPaint(
+                    0, 0, new Color(25, 25, 112), // Midnight Blue
+                    0, getHeight(), new Color(70, 130, 180) // Steel Blue
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        });
+        getContentPane().setLayout(new BorderLayout());
+        
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setOpaque(false);
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        
+        JLabel gameTitle = new JLabel("MAZE ADVENTURE QUEST", JLabel.CENTER);
+        gameTitle.setFont(new Font("Arial", Font.BOLD, 28));
+        gameTitle.setForeground(Color.WHITE);
+        titlePanel.add(gameTitle, BorderLayout.CENTER);
+        
+        getContentPane().add(titlePanel, BorderLayout.NORTH);
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        
         setVisible(true);
     }
 
     private void initializeUI() {
         tabbedPane = new JTabbedPane();
+        tabbedPane.setOpaque(false);
+        tabbedPane.setBackground(new Color(0, 0, 0, 80));
+        tabbedPane.setForeground(Color.WHITE);
+        tabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
+        
         createBeginnerTab();
         createIntermediateTab();
         createAdvancedTab();
-        getContentPane().add(tabbedPane, BorderLayout.CENTER);
     }
 
     private void createBeginnerTab() {
@@ -43,7 +76,7 @@ public class MazeAdventure extends JFrame {
         panel.add(descriptionLabel, BorderLayout.SOUTH);
 
         tabbedPane.addTab("Beginner", new ImageIcon(), panel, "Beginner");
-        tabbedPane.setBackgroundAt(0, new Color(200, 230, 255));
+        tabbedPane.setBackgroundAt(0, new Color(215, 1, 155));
     }
 
     private void createIntermediateTab() {
@@ -61,7 +94,7 @@ public class MazeAdventure extends JFrame {
         panel.add(descriptionLabel, BorderLayout.SOUTH);
 
         tabbedPane.addTab("Intermediate", new ImageIcon(), panel, "Intermediate");
-        tabbedPane.setBackgroundAt(1, new Color(255, 240, 200));
+        tabbedPane.setBackgroundAt(1, new Color(218, 176, 63));
     }
 
     private void createAdvancedTab() {
@@ -96,21 +129,47 @@ public class MazeAdventure extends JFrame {
 
     private JPanel createLevelCard(Level level) {
         JPanel card = new JPanel(new BorderLayout());
-        card.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-        card.setBackground(level.getBackgroundColor());
-
+        card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.WHITE, 2),
+            BorderFactory.createEmptyBorder(8, 8, 8, 8)
+        ));
+        
+        Color baseColor = level.getBackgroundColor();
+        Color cardColor = new Color(
+            Math.max(baseColor.getRed() - 20, 0),
+            Math.max(baseColor.getGreen() - 20, 0),
+            Math.max(baseColor.getBlue() - 20, 0)
+        );
+        card.setBackground(cardColor);
+        
         JLabel nameLabel = new JLabel("Level " + level.getNumber() + ": " + level.getName(), JLabel.CENTER);
-        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        nameLabel.setForeground(Color.WHITE);
         card.add(nameLabel, BorderLayout.NORTH);
-
-        JPanel infoPanel = new JPanel(new GridLayout(3, 1));
+        
+        JPanel infoPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         infoPanel.setOpaque(false);
-        infoPanel.add(new JLabel("Time: " + level.getTimeLimit() + " seconds"));
-        infoPanel.add(new JLabel("Enemies: " + level.getEnemyCount()));
-        infoPanel.add(new JLabel(level.getDifficultyDescription()));
+        
+        JLabel timeLabel = new JLabel("Time: " + level.getTimeLimit() + " seconds");
+        JLabel enemiesLabel = new JLabel("Enemies: " + level.getEnemyCount());
+        JLabel difficultyLabel = new JLabel(level.getDifficultyDescription());
+        
+        timeLabel.setForeground(Color.WHITE);
+        enemiesLabel.setForeground(Color.WHITE);
+        difficultyLabel.setForeground(Color.WHITE);
+        
+        infoPanel.add(timeLabel);
+        infoPanel.add(enemiesLabel);
+        infoPanel.add(difficultyLabel);
         card.add(infoPanel, BorderLayout.CENTER);
-
+        
         JButton playButton = new JButton("Play Level");
+        playButton.setBackground(new Color(50, 205, 50)); // Lime Green
+        playButton.setForeground(Color.black);
+        playButton.setFont(new Font("Arial", Font.BOLD, 14));
+        playButton.setFocusPainted(false);
+        playButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,7 +177,7 @@ public class MazeAdventure extends JFrame {
             }
         });
         card.add(playButton, BorderLayout.SOUTH);
-
+        
         return card;
     }
 

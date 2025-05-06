@@ -93,8 +93,24 @@ class AuthenticationFrame extends JFrame {
         setSize(400, 300);
         setLocationRelativeTo(null);
 
+        setContentPane(new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                
+                GradientPaint gradient = new GradientPaint(
+                    0, 0, new Color(25, 25, 112),
+                    0, getHeight(), new Color(70, 130, 180)
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        });
+        
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+        mainPanel.setOpaque(false);
 
         createLoginPanel();
         createSignupPanel();
@@ -108,18 +124,24 @@ class AuthenticationFrame extends JFrame {
     private void createLoginPanel() {
         JPanel loginPanel = new JPanel(new BorderLayout(10, 10));
         loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        loginPanel.setOpaque(false);
 
         // Title
         JLabel titleLabel = new JLabel("Login to Maze Adventure", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(Color.WHITE);
         loginPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Form panel
         JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        formPanel.setOpaque(false);
 
         JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(Color.WHITE);
         usernameField = new JTextField();
+        
         JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(Color.WHITE);
         passwordField = new JPasswordField();
 
         formPanel.add(usernameLabel);
@@ -129,9 +151,15 @@ class AuthenticationFrame extends JFrame {
 
         // Login button
         JButton loginButton = new JButton("Login");
+        loginButton.setBackground(new Color(50, 205, 50));
+        loginButton.setForeground(Color.black);
+        loginButton.setFocusPainted(false);
         loginButton.addActionListener(e -> attemptLogin());
 
         JButton registerButton = new JButton("Need an account? Sign up");
+        registerButton.setBackground(new Color(81, 180, 70));
+        registerButton.setForeground(Color.black);
+        registerButton.setFocusPainted(false);
         registerButton.addActionListener(e -> cardLayout.show(mainPanel, "signup"));
 
         formPanel.add(loginButton);
@@ -150,20 +178,28 @@ class AuthenticationFrame extends JFrame {
     private void createSignupPanel() {
         JPanel signupPanel = new JPanel(new BorderLayout(10, 10));
         signupPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        signupPanel.setOpaque(false);
 
         // Title
         JLabel titleLabel = new JLabel("Sign Up for Maze Adventure", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(Color.WHITE);
         signupPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Form panel
         JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        formPanel.setOpaque(false);
 
         JLabel usernameLabel = new JLabel("Choose Username:");
+        usernameLabel.setForeground(Color.WHITE);
         JTextField newUsernameField = new JTextField();
+        
         JLabel passwordLabel = new JLabel("Choose Password:");
+        passwordLabel.setForeground(Color.WHITE);
         JPasswordField newPasswordField = new JPasswordField();
+        
         JLabel confirmLabel = new JLabel("Confirm Password:");
+        confirmLabel.setForeground(Color.WHITE);
         JPasswordField confirmPasswordField = new JPasswordField();
 
         formPanel.add(usernameLabel);
@@ -175,6 +211,9 @@ class AuthenticationFrame extends JFrame {
 
         // Register button
         JButton registerButton = new JButton("Register");
+        registerButton.setBackground(new Color(50, 205, 50));
+        registerButton.setForeground(Color.black);
+        registerButton.setFocusPainted(false);
         registerButton.addActionListener(e -> {
             String username = newUsernameField.getText();
             String password = new String(newPasswordField.getPassword());
@@ -197,6 +236,9 @@ class AuthenticationFrame extends JFrame {
         });
 
         JButton backButton = new JButton("Back to Login");
+        backButton.setBackground(new Color(50, 205, 50));
+        backButton.setForeground(Color.black);
+        backButton.setFocusPainted(false);
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "login"));
 
         formPanel.add(registerButton);
@@ -204,7 +246,6 @@ class AuthenticationFrame extends JFrame {
 
         signupPanel.add(formPanel, BorderLayout.CENTER);
 
-        // Status label
         JLabel signupStatusLabel = new JLabel(" ", JLabel.CENTER);
         signupStatusLabel.setForeground(Color.RED);
         signupPanel.add(signupStatusLabel, BorderLayout.SOUTH);
